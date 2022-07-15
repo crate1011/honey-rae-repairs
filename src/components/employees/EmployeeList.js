@@ -12,7 +12,8 @@ useEffect(
         .then((employeeArray) => {
             setEmployees(employeeArray)
         })
-    }
+    },
+    []
 )
 
 return <article className="employees">
