@@ -11,3 +11,14 @@
     border-color: darkorange;
     color: black;
 }
+
+.employee__header {
+    font-size: larger;
+    font-weight: 700;
+    line-height: 3rem;
+}
+
+.employee__footer {
+    margin: 1rem 0 0.25rem 0;
+    font-style: oblique;
+}
