@@ -27,6 +27,4 @@ export const EmployeeDetails = () => {
         <footer className="employee__footer">Currently working on {employee?.employeeTickets?.length} tickets</footer>
     </section>
 
-
-
 }

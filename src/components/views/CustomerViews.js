@@ -1,4 +1,5 @@
 import { Outlet, Route, Routes } from "react-router-dom"
+import { CustomerDetails } from "../customers/CustomerDetails"
 import { TicketForm } from "../tickets/TicketForm"
 import { TicketList } from "../tickets/TicketList"
 
@@ -15,7 +16,6 @@ export const CustomerViews = () => {
 			}>
 
 				<Route path="tickets" element={ <TicketList />} />
-
 				<Route path="ticket/create" element={<TicketForm />} />
 			</Route>
 		</Routes>
