@@ -115,7 +115,7 @@ export const TicketList = ({ searchTermState }) => {
         <article className="tickets">
             {
                 filteredTickets.map(
-                    (ticket) => <Ticket employees={employees}
+                    (ticket) => <Ticket key={`tickets--${ticket.id}`} employees={employees}
                     getAllTickets={getAllTickets} 
                     currentUser={honeyUserObject} 
                     ticketObject={ticket} />
