@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { Ticket } from "./Ticket"
 import "./tickets.css"
 
 export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
+    const [employees, setEmployees] = useState([])
     const [filteredTickets, setFiltered] = useState([])
     const [emergency, setEmergency] = useState(false)
     const [openOnly, updateOpenOnly] = useState(false)
@@ -20,7 +22,7 @@ export const TicketList = ({ searchTermState }) => {
             })
             setFiltered(searchedTickets)
         },
-        [ searchTermState ]
+        [searchTermState]
     )
 
 
@@ -37,13 +39,24 @@ export const TicketList = ({ searchTermState }) => {
         [emergency]
     )
 
+    const getAllTickets = () => {
+        fetch(`http://localhost:8088/serviceTickets?_embed=employeeTickets`)
+                .then(response => response.json())
+                .then((ticketArray) => {
+                    setTickets(ticketArray)
+                })
+    }
+
     useEffect(
         () => {
-            fetch(`http://localhost:8088/serviceTickets`)
-            .then(response => response.json())
-            .then((ticketArray) => {
-                setTickets(ticketArray)
-            })
+
+            getAllTickets()
+
+            fetch(`http://localhost:8088/employees?_expand=user`)
+                .then(response => response.json())
+                .then((employeeArray) => {
+                    setEmployees(employeeArray)
+                })
         },
         []
     )
@@ -71,52 +84,50 @@ export const TicketList = ({ searchTermState }) => {
                     return ticket.userId === honeyUserObject.id && ticket.dateCompleted === ""
                 })
                 setFiltered(openTicketArray)
-            } 
+            }
             else {
                 const myTickets = tickets.filter(ticket => ticket.userId === honeyUserObject.id)
                 setFiltered(myTickets)
-                
+
             }
-            
+
         },
-        [ openOnly ]
+        [openOnly]
     )
 
     return <>
-    {
-        honeyUserObject.staff
-            ? <>
-                <button onClick={ () => { setEmergency(true) } } >Emergency Only</button>
-                <button onClick={ () => { setEmergency(false) } } >Show All</button>
-            </>
-            : <>
-                <button onClick={() => navigate("/ticket/create")}>Create Ticket</button>
-                <button onClick={() => updateOpenOnly(true)}>Open Ticket</button>
-                <button onClick={() => updateOpenOnly(false)}>All My Tickets</button>
+        {
+            honeyUserObject.staff
+                ? <>
+                    <button onClick={() => { setEmergency(true) }} >Emergency Only</button>
+                    <button onClick={() => { setEmergency(false) }} >Show All</button>
+                </>
+                : <>
+                    <button onClick={() => navigate("/ticket/create")}>Create Ticket</button>
+                    <button onClick={() => updateOpenOnly(true)}>Open Ticket</button>
+                    <button onClick={() => updateOpenOnly(false)}>All My Tickets</button>
                 </>
 
-    }
-    
-    <h2>List of Tickets</h2>
-
-    <article className="tickets">
-        {
-            filteredTickets.map(
-                (ticket) => {
-                    return <section className="ticket" key={`ticket--${ticket.id}`}> 
-                        <header>{ticket.description}</header>
-                        <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
-                    </section>
-                }
-            )
         }
 
+        <h2>List of Tickets</h2>
+
+        <article className="tickets">
+            {
+                filteredTickets.map(
+                    (ticket) => <Ticket employees={employees}
+                    getAllTickets={getAllTickets} 
+                    currentUser={honeyUserObject} 
+                    ticketObject={ticket} />
+                )
+            }
 
 
 
-    </article>
-    
-    
-    </> 
-    
+
+        </article>
+
+
+    </>
+
 }

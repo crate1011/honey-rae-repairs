@@ -9,3 +9,12 @@
     padding: 0.7rem;
     margin: 0.5rem 0;
 }
+
+.ticket__finish {
+    margin-left: 25em;
+}
+
+.ticket__delete {
+    margin-left: 25em;
+    background-color: darkorange;
+}

@@ -16,6 +16,9 @@ export const EmployeeNav = () => {
             <li className="navbar__item active">
                 <Link className="navbar__link" to="/customers">Customers</Link>
             </li>
+            <li className="navbar__item active">
+                <Link className="navbar__link" to="/profile">Profile</Link>
+            </li>
             {
                 localStorage.getItem("honey_user")
                     ? <li className="navbar__item navbar__logout">
